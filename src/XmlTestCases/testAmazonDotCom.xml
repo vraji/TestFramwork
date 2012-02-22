@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<root>
+    <setup>
+        <name>Setup for testing amazon.com</name>
+        <url>http://amazon.com</url>
+        <browser>Firefox</browser>
+        <!-- <browser>Chrome</browser> -->
+        <!-- <browser>IE</browser> -->
+    </setup>
+    <element testname = "Check Title">
+        <verifyTitle>Amazon.com: Online Shopping for Electronics, Apparel, Computers, Books, DVDs</verifyTitle>
+    </element>
+    <element id = "searchDropdownBox" testname = "select the category">
+        <select>Books</select>
+    </element>
+    <element name = "field-keywords" testname = "Type serch term">
+        <type>978-0375856112</type>
+    </element>
+    <element id = "navGoButton" testname = "Click go btn">
+        <click/>
+    </element>
+    <element testname = "Check Title">
+        <verifyTitle>Amazon.com: 9780375856112: Books</verifyTitle>
+    </element>
+    <element testname = "TearDown">
+        <tearDown/>
+    </element>
+</root>

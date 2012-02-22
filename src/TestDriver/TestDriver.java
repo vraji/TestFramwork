@@ -27,25 +27,34 @@ public class TestDriver {
     private void readAndExcecuteTests() {
         try {
 
-            File fXmlFile = new File("D:/Vijitha/WorkSpace/TestFramework/src/XmlTestCases/sample.xml");
+            File fXmlFile = new File("./src/XmlTestCases/testAmazonDotCom.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
             doc.getDocumentElement().normalize();
 
-            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
             Node setupNode = getElementByTagName(doc, "setup");
             Testcase tc = new Testcase("Setup", "setup");
+            // Go through the set up tag and get the url to test and the browser and such information
             parseSetupNode(setupNode);
             NodeList elementNodes = doc.getElementsByTagName("element");
             Element elmt;
-            
+            /*Loop through each element tag,  for each element collect the list of actions to perform
+             * Initialise and Set up the tescase class and 
+             * run the test on that element.
+             * TODO : to call report after test completion
+             */
             for (int i = 0; i < elementNodes.getLength(); i++) {
 
                 elmt = (Element) elementNodes.item(i);
+                // get the test name and test ID (test ID not used currently
+                //and set it up in the test case class
                 String tcName = elmt.getAttribute("testname");
                 String tcId = elmt.getAttribute("testid");
                 tc = new Testcase(tcId, tcName);
+                // Check if there is an handler to identify the element and accordingly set up the element 
+                // in testcase
                 if (elmt.hasAttribute("id")) {
                     String tmp = elmt.getAttribute("id");
                     tc.element.setID(tmp);
@@ -63,7 +72,7 @@ public class TestDriver {
                     tc.element.setXpath(tmp);
                 }
                 NodeList actionNodes = elmt.getElementsByTagName("*");
-                
+                //Read the list of actions to be performed in the element and set it on the testcase
                 for (int j = 0; j < actionNodes.getLength(); j++) {
                     Element actionNode = (Element) actionNodes.item(j);
                     String action = actionNode.getTagName();
@@ -76,7 +85,8 @@ public class TestDriver {
                         tc.setActionList(action, value);
                         //System.out.println(action + " : " + value);
                     }
-                    tc.printTestCase();
+                    //tc.printTestCase();
+                    // call the doTest that takes the testcase and performs the test
                     runTest.doTest(tc);
                 }
             }
@@ -98,6 +108,7 @@ public class TestDriver {
         String name = getElementByTagName(setupNode, "name").getNodeValue();
         String url = getElementByTagName(setupNode, "url").getNodeValue();
         String browser = getElementByTagName(setupNode, "browser").getNodeValue();
+        // Set up driver to the test application
         runTest.setup(url, browser);
         System.out.println(name);
     }

@@ -13,7 +13,7 @@ public class PageElement {
     String name;
     String elmtClass;
     String xpath;
-    String handle;
+    String handle = "GENERAL";
     void setID (String str) {
         id = str;
         handle = "ID";

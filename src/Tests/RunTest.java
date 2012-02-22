@@ -18,8 +18,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.support.ui.Select;
 
-public class RunTest {
+public class RunTest extends MainTests {
 
     String url;
     String browser = "firefox";
@@ -28,17 +29,20 @@ public class RunTest {
     WebElement element;
 
     public void doTest(Testcase tc) {
+        //Initializing a new verificationErrors for each test case - they are reported once for all
         verificationErrors = new StringBuffer();
         Map actionList = tc.getActionList();
         PageElement e = tc.getElement();
         element = getHoldOfElement (e);
         if (element == null ) {
             tc.setErrorMessage("Element was not found.");
-            finish();
+            finish(tc);
         }
         for (Object x: actionList.keySet()) {
             performAction (x.toString(), actionList.get(x).toString());
         }
+        tc.setResult("PASS");
+        finish(tc);
     }
 
     public void setup(String url1, String browser1) {
@@ -79,21 +83,50 @@ public class RunTest {
             case "name":
                 tmp = driver.findElement(By.name(e.getName()));
                 break;
+            case "general":
+                tmp = driver.findElement(By.tagName("html"));
+                break;
             default:return null;
         }
         return tmp;
     }
 
-    private void finish() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void finish(Testcase tc) {
+        System.out.print (tc.getTestName() + " :  ");
+        if (tc.getResult().equalsIgnoreCase("Pass") && verificationErrors.length() == 0)  {
+            System.out.print( "Pass\n");
+        } else if (tc.getResult().equalsIgnoreCase("Pass")) {
+            System.out.print( "Pass with warnings");
+            System.out.println ("Warnings : ");
+            System.out.println (verificationErrors);
+        } else {
+            System.out.print( "Failed\n");
+            System.out.println (verificationErrors);
+            
+        }
+        
     }
 
     private void performAction(String action, String value) {
+        //System.out.println ("Performing : " + action);
         switch (action.toLowerCase()) {
             case "click": element.click();
                 break;
             case "type" : element.sendKeys(value);
                 break;
+            case "verifyTitle": verifyTitle (driver, value);
+                break;
+            case "select" : new Select(element).selectByVisibleText(value);
+                break;
+            case "teardown" : driver.close();
+                break;
         }
     }
+
+    private void report(Testcase tc) {
+        // TODO: create a reporting class and stuff. For not printing on console
+        
+    }
+
+    
 }

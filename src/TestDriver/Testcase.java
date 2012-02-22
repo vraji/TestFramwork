@@ -53,7 +53,7 @@ public class Testcase {
             result = "FAIL";
         }
     }
-    String getResult() {
+    public String getResult() {
         return result;
     }
     public void setErrorMessage (String tempMessage) {
