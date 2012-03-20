@@ -10,21 +10,23 @@
 
 <root>
     <setup>
-        <name>Setup for testing cisco.com</name>
+        <name>Setup for testing google.com</name>
         <url>http://google.com</url>
         <browser>Firefox</browser>
         <!-- <browser>Chrome</browser> -->
         <!-- <browser>IE</browser> -->
     </setup>
-    <element name="q" testname="select an element">
+    <element name="q" testname="Type serch term">
         <type>cheese</type>
     </element>
-    <element id="sblsbb" testname="select an element">
+    <element id="sblsbb" testname="Click go btn">
         <click/>
     </element>
-    <element>
-        <verifytextequals>Cheesecafe Factory</verifytextequals>
+    <!-- other yet to be implemented 
+    <element xpath="//*[@id="ires"]/ol/li/div/h3/a" testname ="Check first result">
+            <verifytextequals>Cheese - Wikipedia, the free encyclopedia</verifytextequals>
     </element>
+    -->
             
 </root>
 
